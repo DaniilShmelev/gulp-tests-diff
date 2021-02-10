@@ -30,7 +30,11 @@ let a: ma.TaskLibAnswers = <ma.TaskLibAnswers>{
         "istanbul": "/usr/local/bin/node_modules/istanbul/lib/cli.js",
     },
     "exec": {
-        "/usr/local/bin/gulp --gulpfile gulpfile.js": {
+        "/usr/local/bin/node /fake/wd/node_modules/gulp/gulp.js --gulpfile gulpfile.js": {
+            "code": 0,
+            "stdout": "gulp output here",
+        },
+        "/usr/local/bin/node c:\\fake\\wd\\node_modules\\gulp\\gulp.js --gulpfile gulpfile.js": {
             "code": 0,
             "stdout": "gulp output here",
         },
@@ -57,7 +61,8 @@ let a: ma.TaskLibAnswers = <ma.TaskLibAnswers>{
         "**/build/test/*.js": true,
     },
     "exist": {
-        "/usr/local/bin/gulp": true,
+        "/fake/wd/node_modules/gulp/gulp.js": true,
+        "c:\\fake\\wd\\node_modules\\gulp\\gulp.js": true,
     },
     "match": {
         "**/TEST-*.xml": ["/user/build/fun/test-123.xml"],

@@ -5,7 +5,7 @@ import * as ttm from 'azure-pipelines-task-lib/mock-test';
 
 const isWin = os.type().match(/^Win/);
 
-describe('GulpV0 Suite', function () {
+describe('GulpV1 Suite', function () {
     this.timeout(parseInt(process.env.TASK_TEST_TIMEOUT) || 20000);
 
     before((done: Mocha.Done) => {
@@ -52,12 +52,22 @@ describe('GulpV0 Suite', function () {
     });
 
     it('runs gulp when code coverage is enabled', (done: Mocha.Done) => {
-        const tp = path.join(__dirname, 'L0GulpGlobalGoodWithCodeCoverage.js');
+        const tp = path.join(__dirname, 'L0GulpLocalGoodWithCodeCoverage.js');
         const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
         tr.run();
 
-        assert(tr.ran('/usr/local/bin/gulp --gulpfile gulpfile.js'), 'it should have run Gulp');
+        if (isWin) {
+            assert(
+                tr.ran('/usr/local/bin/node c:\\fake\\wd\\node_modules\\gulp\\gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        } else {
+            assert(
+                tr.ran('/usr/local/bin/node /fake/wd/node_modules/gulp/gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        }
         assert(tr.invokedToolCount == 3, 'should have run npm, Gulp and istanbul');
         assert(tr.stderr.length == 0, 'should not have written to stderr');
         assert(tr.succeeded, 'task should have succeeded');
@@ -71,7 +81,17 @@ describe('GulpV0 Suite', function () {
 
         tr.run();
 
-        assert(tr.ran('/usr/local/bin/gulp --gulpfile gulpfile.js'), 'it should have run Gulp');
+        if (isWin) {
+            assert(
+                tr.ran('/usr/local/bin/node c:\\fake\\wd\\node_modules\\gulp\\gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        } else {
+            assert(
+                tr.ran('/usr/local/bin/node /fake/wd/node_modules/gulp/gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        }
         assert(tr.invokedToolCount == 1, 'should have only run Gulp');
         assert(tr.stderr.length == 0, 'should not have written to stderr');
         assert(tr.succeeded, 'task should have succeeded');
@@ -105,15 +125,15 @@ describe('GulpV0 Suite', function () {
         done();
     });
 
-    it('fails if gulpjs not set', (done: Mocha.Done) => {
+    it('runs a gulpfile through global gulp if gulpjs not set', (done: Mocha.Done) => {
         const tp = path.join(__dirname, 'L0GulpjsNotSet.js');
         const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
         tr.run();
 
-        assert(tr.stdOutContained('Input required: gulpjs'), 'Should have printed: Input required: gulpjs');
-        assert(tr.invokedToolCount == 0, 'should exit before running Gulp');
-        assert(tr.failed, 'should have failed');
+        assert(tr.stdOutContained('gulpjs not set'), 'Should have printed: gulpjs not set');
+        assert(tr.invokedToolCount == 1, 'should have only run Gulp');
+        assert(tr.succeeded, 'task should have succeeded');
 
         done();
     });
@@ -162,7 +182,17 @@ describe('GulpV0 Suite', function () {
 
         tr.run();
 
-        assert(tr.ran('/usr/local/bin/gulp --gulpfile gulpfile.js'), 'it should have run gulp');
+        if (isWin) {
+            assert(
+                tr.ran('/usr/local/bin/node c:\\fake\\wd\\node_modules\\gulp\\gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        } else {
+            assert(
+                tr.ran('/usr/local/bin/node /fake/wd/node_modules/gulp/gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        }
         assert(tr.stdOutContained('loc_mock_GulpFailed'), 'Should have printed: loc_mock_GulpFailed');
         assert(tr.invokedToolCount == 1, 'should have run npm and gulp');
         assert(tr.failed, 'should have failed');
@@ -176,7 +206,17 @@ describe('GulpV0 Suite', function () {
 
         tr.run();
 
-        assert(tr.ran('/usr/local/bin/gulp --gulpfile gulpfile.js'), 'it should have run gulp');
+        if (isWin) {
+            assert(
+                tr.ran('/usr/local/bin/node c:\\fake\\wd\\node_modules\\gulp\\gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        } else {
+            assert(
+                tr.ran('/usr/local/bin/node /fake/wd/node_modules/gulp/gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        }
         assert(tr.stdOutContained('loc_mock_IstanbulFailed'), 'Should have printed: loc_mock_IstanbulFailed');
         assert(tr.invokedToolCount == 3, 'should have run npm, gulp and istanbul');
         assert(tr.failed, 'should have failed');
@@ -203,7 +243,17 @@ describe('GulpV0 Suite', function () {
 
         tr.run();
 
-        assert(tr.ran('/usr/local/bin/gulp --gulpfile gulpfile.js'), 'it should have run gulp');
+        if (isWin) {
+            assert(
+                tr.ran('/usr/local/bin/node c:\\fake\\wd\\node_modules\\gulp\\gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        } else {
+            assert(
+                tr.ran('/usr/local/bin/node /fake/wd/node_modules/gulp/gulp.js --gulpfile gulpfile.js'),
+                'it should have run gulp'
+            );
+        }
         assert(tr.invokedToolCount == 1, 'should run completely');
         assert(
             tr.stdout.search('No pattern found in testResultsFiles parameter') >= 0,
